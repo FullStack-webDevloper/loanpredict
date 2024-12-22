@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
+    <title>Loan Predictor</title>
+</head>
+<body>
+    <div class="container mx-auto mt-10">
+        <h1 class="text-2xl font-bold text-center mb-4">Loan Prediction Form</h1>
+        <form id="loan-form" class="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Gender:</label>
+                <div>
+                    <label><input type="radio" name="Gender" value="1" required> Male</label>
+                    <label><input type="radio" name="Gender" value="0" required> Female</label>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Married:</label>
+                <div>
+                    <label><input type="radio" name="Married" value="1" required> Yes</label>
+                    <label><input type="radio" name="Married" value="0" required> No</label>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Dependents:</label>
+                <input type="number" name="Dependents" min="0" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Education:</label>
+                <div>
+                    <label><input type="radio" name="Education" value="1" required> Graduate</label>
+                    <label><input type="radio" name="Education" value="0" required> Non-Graduate</label>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Self Employed:</label>
+                <div>
+                    <label><input type="radio" name="Self_Employed" value="1" required> Yes</label>
+                    <label><input type="radio" name="Self_Employed" value="0" required> No</label>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Applicant Income:</label>
+                <input placeholder="In ₹ Rupees" type="number" name="ApplicantIncome" min="0" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Coapplicant Income:</label>
+                <input  placeholder="In ₹ Rupees" type="number" name="CoapplicantIncome" min="0" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Loan Amount:</label>
+                <input  placeholder="In ₹ Rupees" type="number" name="LoanAmount" min="0" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Loan Amount Term:</label>
+                <input  placeholder="In Months" type="number" name="Loan_Amount_Term" min="1" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Credit History:</label>
+                <input  placeholder="Enter 0 or 1" type="number" name="Credit_History" min="0" max="1" step="1" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Property Area:</label>
+                <input  placeholder="In ₹ Rupees" type="number" name="Property_Area" min="0"  step="1" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" required>
+            </div>
+            
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Predict</button>
+        </form>
+    </div>
+
+    <script>
+       document.getElementById('loan-form').addEventListener('submit', async function (event) {
+    event.preventDefault();  
+    
+    // Collect form data
+    const formData = new FormData(this);
+    const features = [
+        parseFloat(formData.get('Gender')),  
+        parseFloat(formData.get('Married')),  
+        parseFloat(formData.get('Dependents')),  
+        parseFloat(formData.get('Education')),  
+        parseFloat(formData.get('Self_Employed')),  
+        parseFloat(formData.get('ApplicantIncome')),  
+        parseFloat(formData.get('CoapplicantIncome')),  
+        parseFloat(formData.get('LoanAmount')),  
+        parseFloat(formData.get('Loan_Amount_Term')),  
+        parseFloat(formData.get('Credit_History')),  
+        parseFloat(formData.get('Property_Area'))
+    ];
+
+    console.log('Features Array:', features);
+    try {
+    const response = await fetch("/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ features }) 
+    });
+
+    if (!response.ok) {
+        throw new Error("Server error: " + response.statusText);
+    }
+
+    const result = await response.json();
+    console.log("Prediction Result:", result);
+
+    
+    if (result.prediction === 1) {
+        alert("Your loan is eligible for approved!");
+    } else if (result.prediction === 0) {
+        alert("Unfortunately, your loan cannot be approved.");
+    }
+    else {
+        alert("Unexpected result from the server: " + result.prediction);
+    }
+} catch (error) {
+    console.error("Error:", error);
+    alert("An error occurred: " + error.message);
+}
+
+});
+    </script>
+</body>
+</html>
