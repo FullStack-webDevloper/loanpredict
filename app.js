@@ -50,6 +50,7 @@ app.post("/predict", async (req, res) => {
         const result = await response.json();
         console.log("Model API Response:", result);
 
+    
         if (result.prediction !== undefined && result.prediction !== null) {
             return res.json({ prediction: result.prediction });
         } else {

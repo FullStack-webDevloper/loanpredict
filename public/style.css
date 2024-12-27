@@ -4,8 +4,15 @@ body {
     margin: 20px;
     line-height: 1.6;
     color: black;
-    background-color: #465775;
+    border-radius: 15px;
+    background-color: white;
+    background-image: url("https://media.istockphoto.com/id/2170553587/photo/real-estate-trading-and-wooden-balance-scale-depth-of-field.jpg?s=2048x2048&w=is&k=20&c=G7AVzCOMSLesIs9juWIB-3VQmiLU2VfetT4t0Vjdi8Y=");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
 }
+
 
 .heading {
     text-align: center;
@@ -18,7 +25,7 @@ form {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #556080;
+    background-color:white;
     border: 1px solid #ccc;
     border-radius: 15px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -30,6 +37,7 @@ form {
 }
 
 .form-group label {
+    border-radius: 15px;
     display: block;
     font-weight: bold;
     margin-bottom: 5px;
